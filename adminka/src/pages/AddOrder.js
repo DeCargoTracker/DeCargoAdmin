@@ -13,7 +13,7 @@ const AddOrder = () => {
         customer_phoneNumber: '',
         executor_company_name: '',
         executor_phoneNumber: '',
-        status: '0',
+        status: '1',
         status_message: 'Нова заявка',
         price: '',
         start_date: '',
