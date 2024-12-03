@@ -4,28 +4,40 @@ import '../styles/AdminPanel.css'
 import { useNavigate } from 'react-router-dom';
 const AddOrder = () => {
     const navigate = useNavigate();
-    const executors = [
-        { id: 1, name: 'DECARGO GROUP Sp. z o.o' },
+    const managers = [
+        { id: 1, name: 'Олександр' },
+        { id: 2, name: 'Лева' },
+        { id: 3, name: 'Стас' },
+        { id: 4, name: 'Анастасія' },
+    ];
+    const currency_list = [
+        { id: 1, name: 'UAH' },
+        { id: 2, name: 'EUR' },
+        { id: 3, name: 'USD' },
     ];
     const customers = [
         { id: 1, name: 'Шпіц' },
         { id: 2, name: 'DECARGO GROUP Sp. z o.o' },
         { id: 3, name: 'TransExpress' },
-      ];
+    ];
     const [selectedCustomer, setSelectedCustomer] = useState('');
-    const [selectedExecutor, setSelectedExecutor] = useState('');
+    const [selectedManager, setSelectedManager] = useState('');
+    const [selectedCurrency, setselectedCurrency] = useState('');
     const [newOrder, setNewOrder] = useState({
-        CRM_ID: '',
-        customer_company_name: '',
-        customer_phoneNumber: '',
-        executor_company_name: '',
-        executor_phoneNumber: '',
-        status: '1',
-        status_message: 'Нова заявка',
-        price: '',
-        start_date: '',
-        end_date: '',
-        folder_link: ''
+        CRM_ID:'',
+        customer_company_name:'',
+        customer_company_name_employee:'',
+        delivery_path:'',
+        truck_number:'',
+        crossing_point:'',
+        manager:'',
+        status:'1',
+        status_message:'Нова заявка',
+        price:'',
+        currency:'',
+        start_date:'',
+        end_date:'',
+        folder_link:''
     });
 
     const handleSubmit = (e) => {
@@ -64,7 +76,7 @@ const AddOrder = () => {
                     />
                 </label>
                 <label>
-                    Customer
+                    Замовник
                     <select
                         id="customer"
                         value={selectedCustomer}
@@ -79,58 +91,78 @@ const AddOrder = () => {
                     </select>
                 </label>
                 <label>
-                    Customer Phone Number:
+                    Відповідальна особа від замовника:
                     <input
                         type="text"
-                        value={newOrder.customer_phoneNumber}
-                        onChange={(e) => setNewOrder({ ...newOrder, customer_phoneNumber: e.target.value })}
+                        value={newOrder.customer_company_name_employee}
+                        onChange={(e) => setNewOrder({ ...newOrder, customer_company_name_employee: e.target.value })}
                     />
                 </label>
                 <label>
-                    Executor company name
+                    Маршрут
+                    <input
+                        type="text"
+                        value={newOrder.delivery_path}
+                        onChange={(e) => setNewOrder({ ...newOrder, delivery_path: e.target.value })}
+                    />
+                </label>
+                <label>
+                    Номера авто
+                    <input
+                        type="text"
+                        value={newOrder.truck_number}
+                        onChange={(e) => setNewOrder({ ...newOrder, truck_number: e.target.value })}
+                    />
+                </label>
+                <label>
+                    Погран перехід
+                    <input
+                        type="text"
+                        value={newOrder.crossing_point}
+                        onChange={(e) => setNewOrder({ ...newOrder, crossing_point: e.target.value })}
+                    />
+                </label>
+                <label>
+                    Менеджер:
                     <select
                         id="executor"
-                        value={selectedExecutor}
-                        onChange={(e) => [setSelectedExecutor(e.target.value), setNewOrder({ ...newOrder, executor_company_name: e.target.value })]}
+                        value={selectedManager}
+                        onChange={(e) => [setSelectedManager(e.target.value), setNewOrder({ ...newOrder, manager: e.target.value })]}
                     >
-                        <option value="">-- Select Executor --</option>
-                        {executors.map((executor) => (
-                            <option key={executor.id} value={executor.name}>
-                                {executor.name}
+                        <option value="">-- Оберіть менеджера --</option>
+                        {managers.map((manager) => (
+                            <option key={manager.id} value={manager.name}>
+                                {manager.name}
                             </option>
                         ))}
                     </select>
                 </label>
                 <label>
-                    Executor Phone Number:
-                    <input
-                        type="text"
-                        value={newOrder.executor_phoneNumber}
-                        onChange={(e) => setNewOrder({ ...newOrder, executor_phoneNumber: e.target.value })}
-                    />
-                </label>
-                <label>
-                    Price:
+                    Ціна
                     <input
                         type="text"
                         value={newOrder.price}
                         onChange={(e) => setNewOrder({ ...newOrder, price: e.target.value })}
                     />
+                    <select
+                        id="currency"
+                        value={selectedCurrency}
+                        onChange={(e) => [setselectedCurrency(e.target.value), setNewOrder({ ...newOrder, currency: e.target.value })]}
+                    >
+                        <option value="">-- Оберіть валюту --</option>
+                        {currency_list.map((currency) => (
+                            <option key={currency.id} value={currency.name}>
+                                {currency.name}
+                            </option>
+                        ))}
+                    </select>
                 </label>
                 <label>
-                    Start Date:
+                    Дата початку:
                     <input
                         type="date"
                         value={newOrder.start_date}
                         onChange={(e) => setNewOrder({ ...newOrder, start_date: e.target.value })}
-                    />
-                </label>
-                <label>
-                    End Date:
-                    <input
-                        type="date"
-                        value={newOrder.end_date}
-                        onChange={(e) => setNewOrder({ ...newOrder, end_date: e.target.value })}
                     />
                 </label>
                 <button type="submit">Add Order</button>

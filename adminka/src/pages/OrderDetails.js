@@ -6,6 +6,8 @@ const OrderDetails = () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState(location.state.order);
     const [selectedStatusID, setSelectedStatusID] = useState(order.status)
+    const [selectedManager, setSelectedManager] = useState(order.manager);
+    const [selectedCurrency, setselectedCurrency] = useState(order.currency);
     const [isSaved, setIsSaved] = useState(false);
     const id_status_list = [
         { id: 1, name: 1 },
@@ -14,6 +16,23 @@ const OrderDetails = () => {
         { id: 4, name: 4 },
         { id: 5, name: 5 }
     ];
+    const managers = [
+        { id: 1, name: 'Олександр' },
+        { id: 2, name: 'Лева' },
+        { id: 3, name: 'Стас' },
+        { id: 4, name: 'Анастасія' },
+    ];
+    const currency_list = [
+        { id: 1, name: 'UAH' },
+        { id: 2, name: 'EUR' },
+        { id: 3, name: 'USD' },
+    ];
+    const handleCurrencyrChange = (e) =>{
+        setOrder({ ...order, 'currency': selectedCurrency });
+    }
+    const handleManagerChange = (e) =>{
+        setOrder({ ...order, 'manager': selectedManager });
+    }
     const handleStatusIDChange = (e) => {
         setOrder({ ...order, 'status': selectedStatusID });
     };
@@ -53,7 +72,7 @@ const OrderDetails = () => {
                     <input type="text" name="CRM_ID" value={order.CRM_ID} readOnly />
                 </div>
                 <div>
-                    <label>Customer Company Name:</label>
+                    <label>Замовник</label>
                     <input
                         type="text"
                         name="customer_company_name"
@@ -62,34 +81,78 @@ const OrderDetails = () => {
                     />
                 </div>
                 <div>
-                    <label>Customer Company Phone:</label>
+                    <label>Відповідальна особа від замовника:</label>
                     <input
                         type="text"
-                        name="customer_phoneNumber"
-                        value={order.customer_phoneNumber}
+                        name="customer_company_name_employee"
+                        value={order.customer_company_name_employee}
                         onChange={handleInputChange}
                     />
                 </div>
                 <div>
-                    <label>Executor company name:</label>
+                    <label>Маршрут</label>
                     <input
                         type="text"
-                        name="executor_company_name"
-                        value={order.executor_company_name}
+                        name="delivery_path"
+                        value={order.delivery_path}
                         onChange={handleInputChange}
                     />
                 </div>
                 <div>
-                    <label>Executor phone:</label>
+                    <label>Номера авто</label>
                     <input
                         type="text"
-                        name="executor_phoneNumber"
-                        value={order.executor_phoneNumber}
+                        name="truck_number"
+                        value={order.truck_number}
                         onChange={handleInputChange}
                     />
                 </div>
                 <div>
-                    <label>Status ID</label>
+                    <label>Погран перехід</label>
+                    <input
+                        type="text"
+                        name="crossing_point"
+                        value={order.crossing_point}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div>
+                    <label>Менеджер</label>
+                    <select
+                        id="manager"
+                        value={selectedManager}
+                        onChange={(e) => [setSelectedManager(e.target.value), handleManagerChange(e.target.value)]}
+                    >
+                        <option value="">-- Оберіть менеджера --</option>
+                        {managers.map((manager) => (
+                            <option key={manager.id} value={manager.name}>
+                                {manager.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>Ціна</label>
+                    <input
+                        type="text"
+                        name="price"
+                        value={order.price}
+                        onChange={handleInputChange}
+                    />
+                    <select
+                        id="currency"
+                        value={selectedCurrency}
+                        onChange={(e) => [setselectedCurrency(e.target.value), handleCurrencyrChange(e.target.value)]}
+                    >
+                        {currency_list.map((currency) => (
+                            <option key={currency.id} value={currency.name}>
+                                {currency.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>Статус авто</label>
                     <select
                         id="id_status"
                         value={selectedStatusID}
@@ -108,15 +171,6 @@ const OrderDetails = () => {
                         type="text"
                         name="status_message"
                         value={order.status_message}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>Price:</label>
-                    <input
-                        type="text"
-                        name="price"
-                        value={order.price}
                         onChange={handleInputChange}
                     />
                 </div>
