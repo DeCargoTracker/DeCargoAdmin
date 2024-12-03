@@ -22,7 +22,7 @@ const AddOrder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert('Order added successfully!');
+        console.log('added')
         console.log('New Order:', JSON.stringify(newOrder));
         addOrder()
     };

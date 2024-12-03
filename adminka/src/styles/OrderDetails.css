@@ -1,0 +1,83 @@
+.order-details {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .order-details h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .order_inputs {
+    width: 100%;
+  }
+  
+  .order_inputs div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .order_inputs label {
+    width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    text-align: left;
+    padding-left: 10%;
+  }
+  
+  .order_inputs input,
+  .order_inputs select {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .order_inputs select {
+    appearance: none;
+  }
+  
+  .order_inputs input[readonly] {
+    background-color: #e9e9e9;
+    cursor: not-allowed;
+  }
+  
+  .order-details button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 45%;
+  }
+  
+  .order-details button:first-child {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .order-details button:first-child:hover {
+    background-color: #45a049;
+  }
+  
+  .order-details button:last-child {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .order-details button:last-child:hover {
+    background-color: #d32f2f;
+  }
+  

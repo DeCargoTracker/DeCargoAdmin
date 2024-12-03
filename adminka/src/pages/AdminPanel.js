@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../styles/AdminPanel.css'
+import OrdersList from './OrdersList';
 const customers = [
   { id: 1, name: 'Шпіц' },
   { id: 2, name: 'DECARGO GROUP Sp. z o.o' },
@@ -9,7 +10,6 @@ const customers = [
 
 const AdminPanel = () => {
   const [selectedCustomer, setSelectedCustomer] = useState('');
-  const [orders, setOrders] = useState([]);
 
   return (
     <div className="admin-panel">
@@ -33,16 +33,7 @@ const AdminPanel = () => {
 
       <Link to="/add-order" className="button">Add New Order</Link>
 
-      <div className="order-list">
-        <h2>Order List</h2>
-        <ul>
-          {orders.map((order, index) => (
-            <li key={index}>
-              {order.customer_company_name} - {order.CRM_ID} - {order.status_message}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <OrdersList></OrdersList>
     </div>
   );
 };
