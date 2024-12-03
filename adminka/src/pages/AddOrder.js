@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../styles/AdminPanel.css'
-
+import { useNavigate } from 'react-router-dom';
 const AddOrder = () => {
-    const customers = [
+    const navigate = useNavigate();
+    const executors = [
         { id: 1, name: 'DECARGO GROUP Sp. z o.o' },
     ];
+    const customers = [
+        { id: 1, name: 'Шпіц' },
+        { id: 2, name: 'DECARGO GROUP Sp. z o.o' },
+        { id: 3, name: 'TransExpress' },
+      ];
     const [selectedCustomer, setSelectedCustomer] = useState('');
+    const [selectedExecutor, setSelectedExecutor] = useState('');
     const [newOrder, setNewOrder] = useState({
         CRM_ID: '',
         customer_company_name: '',
@@ -18,6 +25,7 @@ const AddOrder = () => {
         price: '',
         start_date: '',
         end_date: '',
+        folder_link: ''
     });
 
     const handleSubmit = (e) => {
@@ -25,6 +33,7 @@ const AddOrder = () => {
         console.log('added')
         console.log('New Order:', JSON.stringify(newOrder));
         addOrder()
+        navigate(`/`);
     };
     const addOrder = async () => {
         console.log('Push new order');
@@ -59,7 +68,7 @@ const AddOrder = () => {
                     <select
                         id="customer"
                         value={selectedCustomer}
-                        onChange={(e) => setSelectedCustomer(e.target.value)}
+                        onChange={(e) => [setNewOrder({ ...newOrder, customer_company_name: e.target.value }), setSelectedCustomer(e.target.value)]}
                     >
                         <option value="">-- Select Customer --</option>
                         {customers.map((customer) => (
@@ -78,12 +87,19 @@ const AddOrder = () => {
                     />
                 </label>
                 <label>
-                    Executor Company Name:
-                    <input
-                        type="text"
-                        value={newOrder.executor_company_name}
-                        onChange={(e) => setNewOrder({ ...newOrder, executor_company_name: e.target.value })}
-                    />
+                    Executor company name
+                    <select
+                        id="executor"
+                        value={selectedExecutor}
+                        onChange={(e) => [setSelectedExecutor(e.target.value), setNewOrder({ ...newOrder, executor_company_name: e.target.value })]}
+                    >
+                        <option value="">-- Select Executor --</option>
+                        {executors.map((executor) => (
+                            <option key={executor.id} value={executor.name}>
+                                {executor.name}
+                            </option>
+                        ))}
+                    </select>
                 </label>
                 <label>
                     Executor Phone Number:

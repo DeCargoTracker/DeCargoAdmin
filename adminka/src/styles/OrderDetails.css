@@ -80,4 +80,25 @@
   .order-details button:last-child:hover {
     background-color: #d32f2f;
   }
+/* Анимация для подсветки формы */
+@keyframes highlight {
+    0% {
+        background-color: #ffffff; /* Начальный цвет */
+        border-color: #cccccc;
+    }
+    50% {
+        background-color: #d4f7d4; /* Зеленый фон в середине анимации */
+        border-color: #4caf50; /* Зеленая граница */
+    }
+    100% {
+        background-color: #ffffff; /* Возвращаемся к обычному фону */
+        border-color: #cccccc;
+    }
+}
+
+.order-details.saved {
+    animation: highlight 2s ease-in-out; /* Применяем анимацию */
+    border: 2px solid #cccccc; /* Параметры границы */
+}
+
   

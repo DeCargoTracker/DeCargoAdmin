@@ -6,6 +6,7 @@ const OrderDetails = () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState(location.state.order);
     const [selectedStatusID, setSelectedStatusID] = useState(order.status)
+    const [isSaved, setIsSaved] = useState(false);
     const id_status_list = [
         { id: 1, name: 1 },
         { id: 2, name: 2 },
@@ -30,8 +31,13 @@ const OrderDetails = () => {
                 },
                 body: await JSON.stringify(order)
             })
+            setIsSaved(true);
+            setTimeout(() => {
+                navigate('/');
+            }, 1500);
         } catch (error) {
             console.log('Error in upd order', error)
+            setIsSaved(false);
         }
     };
 
@@ -39,7 +45,7 @@ const OrderDetails = () => {
         handleStatusIDChange()
     }, [selectedStatusID])
     return (
-        <div className="order-details">
+        <div className={`order-details ${isSaved ? 'saved' : ''}`}>
             <h2>Order Details</h2>
             <div className='order_inputs'>
                 <div>
@@ -111,6 +117,33 @@ const OrderDetails = () => {
                         type="text"
                         name="price"
                         value={order.price}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div>
+                    <label>Start Date:</label>
+                    <input
+                        type="date"
+                        name="start_date"
+                        value={order.start_date}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div>
+                    <label>End Date:</label>
+                    <input
+                        type="date"
+                        name="end_date"
+                        value={order.end_date}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div>
+                    <label>Folder link</label>
+                    <input
+                        type="text"
+                        name="folder_link"
+                        value={order.folder_link}
                         onChange={handleInputChange}
                     />
                 </div>
