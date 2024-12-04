@@ -10,11 +10,12 @@ const OrderDetails = () => {
     const [selectedCurrency, setselectedCurrency] = useState(order.currency);
     const [isSaved, setIsSaved] = useState(false);
     const id_status_list = [
-        { id: 1, name: 1 },
-        { id: 2, name: 2 },
-        { id: 3, name: 3 },
-        { id: 4, name: 4 },
-        { id: 5, name: 5 }
+        { id: 0, name: 'Нова заявка' },
+        { id: 1, name: 'На завантаженні' },
+        { id: 2, name: 'На митниці до погран переходу' },
+        { id: 3, name: 'Погран перехід' },
+        { id: 4, name: 'На митниці після погран переходу' },
+        { id: 5, name: 'Ни вивантаженні' }
     ];
     const managers = [
         { id: 1, name: 'Олександр' },
@@ -27,28 +28,30 @@ const OrderDetails = () => {
         { id: 2, name: 'EUR' },
         { id: 3, name: 'USD' },
     ];
-    const handleCurrencyrChange = (e) =>{
+    const handleCurrencyrChange = (e) => {
         setOrder({ ...order, 'currency': selectedCurrency });
     }
-    const handleManagerChange = (e) =>{
+    const handleManagerChange = (e) => {
         setOrder({ ...order, 'manager': selectedManager });
     }
     const handleStatusIDChange = (e) => {
+        console.log(e)
         setOrder({ ...order, 'status': selectedStatusID });
     };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setOrder({ ...order, [name]: value });
     };
-    const handleSave = async() => {
+    const handleSave = async () => {
         console.log(order)
+        const updatedOrder = { ...order, approved: false };
         try {
-            await fetch('http://localhost:3011/order/upd',{
-                method:'PUT',
+            await fetch('http://localhost:3011/order/upd', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
                 },
-                body: await JSON.stringify(order)
+                body: await JSON.stringify(updatedOrder)
             })
             setIsSaved(true);
             setTimeout(() => {
@@ -63,6 +66,12 @@ const OrderDetails = () => {
     useEffect(() => {
         handleStatusIDChange()
     }, [selectedStatusID])
+    useEffect(() => {
+        handleCurrencyrChange()
+    }, [selectedCurrency])
+    useEffect(() => {
+        handleManagerChange()
+    }, [selectedManager])
     return (
         <div className={`order-details ${isSaved ? 'saved' : ''}`}>
             <h2>Order Details</h2>
@@ -121,7 +130,7 @@ const OrderDetails = () => {
                     <select
                         id="manager"
                         value={selectedManager}
-                        onChange={(e) => [setSelectedManager(e.target.value), handleManagerChange(e.target.value)]}
+                        onChange={(e) => setSelectedManager(e.target.value)}
                     >
                         <option value="">-- Оберіть менеджера --</option>
                         {managers.map((manager) => (
@@ -142,7 +151,7 @@ const OrderDetails = () => {
                     <select
                         id="currency"
                         value={selectedCurrency}
-                        onChange={(e) => [setselectedCurrency(e.target.value), handleCurrencyrChange(e.target.value)]}
+                        onChange={(e) => setselectedCurrency(e.target.value)}
                     >
                         {currency_list.map((currency) => (
                             <option key={currency.id} value={currency.name}>
@@ -156,17 +165,17 @@ const OrderDetails = () => {
                     <select
                         id="id_status"
                         value={selectedStatusID}
-                        onChange={(e) => setSelectedStatusID(e.target.value)}
+                        onChange={(e) => setSelectedStatusID(e.target.value)} // получаем ID
                     >
-                        {id_status_list.map((status_id) => (
-                            <option key={status_id.id} value={status_id.name}>
-                                {status_id.name}
+                        {id_status_list.map((status) => (
+                            <option key={status.id} value={status.id}> {/* используем ID */}
+                                {status.name}
                             </option>
                         ))}
                     </select>
                 </div>
                 <div>
-                    <label>Status Message:</label>
+                    <label>Статус текстом</label>
                     <input
                         type="text"
                         name="status_message"
@@ -175,7 +184,7 @@ const OrderDetails = () => {
                     />
                 </div>
                 <div>
-                    <label>Start Date:</label>
+                    <label>Дата завантаження</label>
                     <input
                         type="date"
                         name="start_date"

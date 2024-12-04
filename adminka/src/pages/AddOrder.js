@@ -31,12 +31,13 @@ const AddOrder = () => {
         truck_number:'',
         crossing_point:'',
         manager:'',
-        status:'1',
+        status:'0',
         status_message:'Нова заявка',
         price:'',
         currency:'',
         start_date:'',
         end_date:'',
+        approved:false,
         folder_link:''
     });
 

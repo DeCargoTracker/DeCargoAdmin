@@ -16,6 +16,14 @@ const OrdersList = () => {
     useEffect(()=>{
         getOrders()
     },[])
+    const id_status_list = [
+      { id: 0, name: 'Нова заявка' },
+      { id: 1, name: 'На завантаженні' },
+      { id: 2, name: 'На митниці до погран переходу' },
+      { id: 3, name: 'Погран перехід' },
+      { id: 4, name: 'На митниці після погран переходу' },
+      { id: 5, name: 'Ни вивантаженні' }
+  ];
     return (
         <div className="order-list">
     <h2>Order List</h2>
@@ -24,8 +32,9 @@ const OrdersList = () => {
         <li className="order-card" key={index} onClick={()=>{orderClick(order)}}>
           <h3>{order.customer_company_name}</h3>
           <p><strong>CRM ID:</strong> {order.CRM_ID}</p>
-          <p><strong>Status Message:</strong> {order.status_message}</p>
-          <p><strong>Status ID:</strong> [{order.status}]</p>
+          <p><strong>Текст статусу</strong> {order.status_message}</p>
+          <p><strong>Статус</strong> {id_status_list.find(status => status.id === parseInt(order.status))?.name}</p>
+          <p><strong>Approved:</strong> {order.approved ? 'Підтверджено' : 'Не підтверджено'}</p>
         </li>
       ))}
     </ul>
