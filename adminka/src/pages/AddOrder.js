@@ -50,7 +50,7 @@ const AddOrder = () => {
     };
     const addOrder = async () => {
         console.log('Push new order');
-        await fetch('http://localhost:3011/order/add', {
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/order/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Устанавливает тип данных

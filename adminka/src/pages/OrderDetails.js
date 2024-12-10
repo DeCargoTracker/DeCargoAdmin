@@ -46,7 +46,7 @@ const OrderDetails = () => {
         console.log(order)
         const updatedOrder = { ...order, approved: false };
         try {
-            await fetch('http://localhost:3011/order/upd', {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
