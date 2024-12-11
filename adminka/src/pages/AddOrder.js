@@ -40,7 +40,9 @@ const AddOrder = () => {
         approved:false,
         folder_link:''
     });
-
+    const back_to_adminPanel = () =>{
+        navigate('/')
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('added')
@@ -168,7 +170,7 @@ const AddOrder = () => {
                 </label>
                 <button type="submit">Add Order</button>
             </form>
-            <Link to="/" className="button">Back to Admin Panel</Link>
+            <button onClick={back_to_adminPanel} className="button">Back to Admin Panel</button>
         </div>
     );
 };
