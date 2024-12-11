@@ -42,16 +42,33 @@ const OrderDetails = () => {
         const { name, value } = e.target;
         setOrder({ ...order, [name]: value });
     };
+    const getUpdatedFields = () => {
+        const updatedFields = {};
+        Object.keys(order).forEach((key) => {
+            if (order[key] !== location.state.order[key]) {
+                updatedFields[key] = order[key];
+            }
+        });
+        if (!updatedFields.customer_company_name && location.state.order.customer_company_name) {
+            updatedFields.customer_company_name = location.state.order.customer_company_name;
+        }
+        return updatedFields;
+    };
+    
     const handleSave = async () => {
-        console.log(order)
-        const updatedOrder = { ...order, approved: false };
+        const updatedFields = await getUpdatedFields();
+        if (Object.keys(updatedFields).length === 0) {
+            console.log('Нет изменений для сохранения.');
+            return;
+        }
         try {
+            const newFields = {...updatedFields, approved:false, CRM_ID:location.state.order.CRM_ID}
             await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
                 },
-                body: await JSON.stringify(updatedOrder)
+                body: await JSON.stringify(newFields)
             })
             setIsSaved(true);
             setTimeout(() => {
