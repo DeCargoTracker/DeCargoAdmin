@@ -9,12 +9,12 @@ const OrdersList = () => {
     console.log(order)
     navigate(`/order_detail`, { state: { order } });
   }
+  const getOrders = async () => {
+    console.log(process.env.REACT_APP_SERVER_URL)
+    setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order`)).json())
+    console.log(orders)
+  }
   useEffect(() => {
-    const getOrders = async () => {
-      console.log(process.env.REACT_APP_SERVER_URL)
-      setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order`)).json())
-      console.log(orders)
-    }
     getOrders()
   }, [])
   const id_status_list = [
