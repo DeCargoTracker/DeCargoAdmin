@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Link } from 'react-router-dom';
 import '../styles/AdminPanel.css'
 import { useNavigate } from 'react-router-dom';
 const AddOrder = () => {
