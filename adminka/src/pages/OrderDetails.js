@@ -52,6 +52,9 @@ const OrderDetails = () => {
         if (!updatedFields.customer_company_name && location.state.order.customer_company_name) {
             updatedFields.customer_company_name = location.state.order.customer_company_name;
         }
+        if (order.end_date !== location.state.order.end_date) {
+            updatedFields.start_date = location.state.order.start_date;
+        }
         return updatedFields;
     };
     
