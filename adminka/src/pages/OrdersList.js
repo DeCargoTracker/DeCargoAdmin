@@ -25,6 +25,9 @@ const OrdersList = () => {
     { id: 4, name: 'На митниці після погран переходу' },
     { id: 5, name: 'Ни вивантаженні' }
   ];
+  const finishOrder = (()=>{
+    
+  })
   return (
     <div className="order-list">
       <h2>Order List</h2>
@@ -33,9 +36,11 @@ const OrdersList = () => {
           <li className="order-card" key={index} onClick={() => { orderClick(order) }}>
             <h3>{order.customer_company_name}</h3>
             <p><strong>CRM ID:</strong> {order.CRM_ID}</p>
+            <p><strong>Напрямок:</strong> {order.delivery_path}</p>
             <p><strong>Текст статусу</strong> {order.status_message}</p>
             <p><strong>Статус</strong> {id_status_list.find(status => status.id === parseInt(order.status))?.name}</p>
-            <p><strong>Approved:</strong> {order.approved ? 'Підтверджено' : 'Не підтверджено'}</p>
+            <p><strong>Approved:</strong> {order.approved ? 'Підтверджено ✅' : 'Не підтверджено ❗'}</p>
+            {parseInt(order.status) == 5 && order.approved ? <button onClick={finishOrder} className="button">Завершити перевезення</button> : <></>}
           </li>
         ))}
       </ul>

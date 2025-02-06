@@ -7,7 +7,6 @@ const AddOrder = () => {
     const managers = [
         { id: 1, name: 'Олександр' },
         { id: 2, name: 'Лева' },
-        { id: 3, name: 'Стас' },
         { id: 4, name: 'Анастасія' },
     ];
     const currency_list = [
@@ -80,7 +79,7 @@ const AddOrder = () => {
                 </label>
                 <label>
                     Замовник
-                    <select
+                    {/* <select
                         id="customer"
                         value={selectedCustomer}
                         onChange={(e) => [setNewOrder({ ...newOrder, customer_company_name: e.target.value }), setSelectedCustomer(e.target.value)]}
@@ -91,7 +90,12 @@ const AddOrder = () => {
                                 {customer.name}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+                    <input
+                        type="text"
+                        value={newOrder.customer_company_name}
+                        onChange={(e) => setNewOrder({ ...newOrder, customer_company_name: e.target.value })}
+                    />
                 </label>
                 <label>
                     Відповідальна особа від замовника:
