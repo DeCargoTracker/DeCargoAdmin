@@ -37,6 +37,7 @@ const AddOrder = () => {
         start_date:'',
         end_date:'',
         approved:false,
+        isFinished:false,
         folder_link:''
     });
     const back_to_adminPanel = () =>{
