@@ -101,7 +101,14 @@ const OrdersList = ({ isArchived }) => {
               :
               <></>
             }
-            {(order.isFinished && !order.isArchivedAdmin) ? <button onClick={() => { archiveOrder(order) }} className="button">Додати в архів</button> : <button onClick={() => { UNarchiveOrder(order) }} className="button">Зробити активним</button>}
+            {order.isFinished ? (
+              !order.isArchivedAdmin ? (
+                <button onClick={() => archiveOrder(order)} className="button">Додати в архів</button>
+              ) : (
+                <button onClick={() => UNarchiveOrder(order)} className="button">Зробити активним</button>
+              )
+            ) : null}
+
           </>
         ))}
       </ul>
