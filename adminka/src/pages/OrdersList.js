@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { data, useNavigate } from 'react-router-dom';
 import '../styles/OrderList.css'
 
-const OrdersList = () => {
+const OrdersList = ({ isArchived }) => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const orderClick = (order) => {
@@ -10,13 +10,21 @@ const OrdersList = () => {
     navigate(`/order_detail`, { state: { order } });
   }
   const getOrders = async () => {
-    console.log(process.env.REACT_APP_SERVER_URL)
-    setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order`)).json())
-    console.log(orders)
+    if (isArchived) {
+      console.log(process.env.REACT_APP_SERVER_URL)
+      setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order/admin/archive`)).json())
+      console.log(orders)
+    }
+    else {
+      console.log(process.env.REACT_APP_SERVER_URL)
+      setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order/admin/active`)).json())
+      console.log(orders)
+    }
   }
   useEffect(() => {
+    console.log(`Archived in orders list ${isArchived}`)
     getOrders()
-  }, [])
+  }, [isArchived])
   const id_status_list = [
     { id: 0, name: 'Нова заявка' },
     { id: 1, name: 'На завантаженні' },
@@ -39,6 +47,39 @@ const OrdersList = () => {
     } catch (error) {
       console.log('Error in upd order', error)
     }
+    getOrders()
+  }
+  const archiveOrder = async (order) => {
+    console.log(`Archiving order ${order.CRM_ID} ${true}`)
+    try {
+      const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: true }
+      await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
+        },
+        body: await JSON.stringify(newFields)
+      })
+    } catch (error) {
+      console.log('Error in archiveOrder order', error)
+    }
+    getOrders()
+  }
+  const UNarchiveOrder = async (order) => {
+    console.log(`Archiving order ${order.CRM_ID} ${false}`)
+    try {
+      const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: false }
+      await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
+        },
+        body: await JSON.stringify(newFields)
+      })
+    } catch (error) {
+      console.log('Error in archiveOrder order', error)
+    }
+    getOrders()
   }
   return (
     <div className="order-list">
@@ -60,6 +101,7 @@ const OrdersList = () => {
               :
               <></>
             }
+            {(order.isFinished && !order.isArchivedAdmin) ? <button onClick={() => { archiveOrder(order) }} className="button">Додати в архів</button> : <button onClick={() => { UNarchiveOrder(order) }} className="button">Зробити активним</button>}
           </>
         ))}
       </ul>

@@ -84,4 +84,7 @@ body {
   .order-list li:last-child {
     border-bottom: none;
   }
+  .btns{
+    flex-direction: row;
+  }
   
