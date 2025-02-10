@@ -1,0 +1,84 @@
+.drop-zone {
+    border: 2px dashed #ff8c00;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    background-color: #fffaf0;
+  }
+  
+  .drop-zone.dragging {
+    border-color: #ff4500;
+    background-color: #ffebcd;
+  }
+  
+  .drop-zone-title {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #d2691e;
+    margin-bottom: 10px;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-label {
+    cursor: pointer;
+    background-color: #ff8c00;
+    color: white;
+    padding: 8px 0px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background 0.2s;
+  }
+  
+  .file-label:hover {
+    background-color: #e07b00;
+  }
+  
+  .file-list {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #8b4513;
+  }
+  
+  /* Секция с файлами */
+  .file-preview {
+    display: flex!important; 
+    flex-wrap: wrap!important;
+    flex-direction: row!important;
+    justify-content:'center';
+    margin-top: 15px;
+    gap: 10px;
+  }
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #fff5e1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    border: 1px solid #ff8c00;
+  }
+  
+  .file-icon {
+    font-size: 20px;
+  }
+  
+  .remove-file {
+    background: none;
+    border: none;
+    color: #ff4500;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .remove-file:hover {
+    color: #d32f2f;
+  }
+  

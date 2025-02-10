@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/OrderDetails.css'
+import DragDropFile from '../component/DragDropFile';
 const OrderDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ const OrderDetails = () => {
     const [selectedManager, setSelectedManager] = useState(order.manager);
     const [selectedCurrency, setselectedCurrency] = useState(order.currency);
     const [isSaved, setIsSaved] = useState(false);
+    const [files, setFiles] = useState()
     const id_status_list = [
         { id: 0, name: 'Нова заявка' },
         { id: 1, name: 'На завантаженні' },
@@ -57,7 +59,7 @@ const OrderDetails = () => {
         }
         return updatedFields;
     };
-    
+
     const handleSave = async () => {
         const updatedFields = await getUpdatedFields();
         if (Object.keys(updatedFields).length === 0) {
@@ -65,7 +67,7 @@ const OrderDetails = () => {
             return;
         }
         try {
-            const newFields = {...updatedFields, approved:false, CRM_ID:location.state.order.CRM_ID}
+            const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
             await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
                 method: 'PUT',
                 headers: {
@@ -73,6 +75,21 @@ const OrderDetails = () => {
                 },
                 body: await JSON.stringify(newFields)
             })
+            if(files){
+                if (files.length > 0) {
+                    const formData = new FormData();
+                    formData.append("CRM_ID", `${order.CRM_ID}`); // Пример CRM_ID
+                    files.forEach((file) => formData.append("file", file)); // Добавляем файлы
+                    const response = await fetch("http://localhost:3011/file/upload", {
+                        method: "POST",
+                        body: formData,
+                    });
+                    if (!response.ok) throw new Error("Ошибка загрузки");
+                    const data = await response.json();
+                    console.log("Файл загружен:", data);
+                }
+            }
+            
             setIsSaved(true);
             setTimeout(() => {
                 navigate('/');
@@ -222,13 +239,8 @@ const OrderDetails = () => {
                     />
                 </div>
                 <div>
-                    <label>Folder link</label>
-                    <input
-                        type="text"
-                        name="folder_link"
-                        value={order.folder_link}
-                        onChange={handleInputChange}
-                    />
+                    <DragDropFile onFilesSelect={setFiles} />
+
                 </div>
             </div>
             <button onClick={handleSave}>Save</button>
