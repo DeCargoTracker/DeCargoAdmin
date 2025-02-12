@@ -41,10 +41,10 @@ export default function DragDropFile({ onFilesSelect }) {
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
     >
-      <label className="drop-zone-title">Upload Files</label>
+      <label className="drop-zone-title">Завантаження файлів</label>
       <input type="file" multiple onChange={handleFileChange} className="file-input" id="fileInput" />
-      <label htmlFor="fileInput" className="file-label">Choose Files</label>
-      <p className="file-list">{files.length > 0 ? "Drag & Drop more files or remove them below" : "Drag & Drop files here"}</p>
+      <label htmlFor="fileInput" className="file-label">Обрати файли</label>
+      <p className="file-list">{files.length > 0 ? "Перетягніть файли або приберіть вже додані" : "Перетягніть файли"}</p>
       
       {/* Отображение загруженных файлов */}
       <div className="file-preview">

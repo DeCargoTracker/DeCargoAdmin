@@ -1,11 +1,11 @@
 .drop-zone {
-    border: 2px dashed #ff8c00;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    transition: all 0.3s ease-in-out;
-    background-color: #fffaf0;
-  }
+  border: 2px dashed #ff8c00;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  background-color: #fffaf0;
+}
   
   .drop-zone.dragging {
     border-color: #ff4500;

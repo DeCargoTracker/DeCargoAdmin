@@ -80,7 +80,7 @@ const OrderDetails = () => {
                     const formData = new FormData();
                     formData.append("CRM_ID", `${order.CRM_ID}`); // Пример CRM_ID
                     files.forEach((file) => formData.append("file", file)); // Добавляем файлы
-                    const response = await fetch("http://localhost:3011/file/upload", {
+                    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/file/upload`, {
                         method: "POST",
                         body: formData,
                     });
@@ -99,7 +99,9 @@ const OrderDetails = () => {
             setIsSaved(false);
         }
     };
-
+    const handleOpenDocuments = async () => {
+        navigate('/documents', {state: {CRM:location.state.order.CRM_ID} });
+    };
     useEffect(() => {
         handleStatusIDChange()
     }, [selectedStatusID])
@@ -230,7 +232,7 @@ const OrderDetails = () => {
                     />
                 </div>
                 <div>
-                    <label>End Date:</label>
+                    <label>Дата закінчення:</label>
                     <input
                         type="date"
                         name="end_date"
@@ -240,11 +242,11 @@ const OrderDetails = () => {
                 </div>
                 <div>
                     <DragDropFile onFilesSelect={setFiles} />
-
                 </div>
             </div>
-            <button onClick={handleSave}>Save</button>
-            <button onClick={() => navigate('/')}>Cancel</button>
+            <button onClick={handleSave}>Зберегти</button>
+            <button onClick={handleOpenDocuments}>Документи</button>
+            <button onClick={() => navigate('/')}>Відміна</button>
         </div>
     );
 };
