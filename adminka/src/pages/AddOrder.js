@@ -38,7 +38,6 @@ const AddOrder = () => {
         end_date:'',
         approved:false,
         isFinished:false,
-        folder_link:''
     });
     const back_to_adminPanel = () =>{
         navigate('/')
