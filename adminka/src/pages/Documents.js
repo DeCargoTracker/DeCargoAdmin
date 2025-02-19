@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Documents.css";
+import { deleteDocument, fetchDocuments } from "../component/fetches";
 
 const Documents = () => {
   const location = useLocation();
@@ -10,44 +11,25 @@ const Documents = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const ApiRequestFetchDocuments = async () => {
+    const result = await fetchDocuments(CRM_ID);
+    console.log(`fetchDocuments result  ${result}`)
+    setDocuments(result);
+  }
   useEffect(() => {
     if (!CRM_ID) {
       setError("CRM_ID не передан.");
       setLoading(false);
       return;
     }
-
-    const fetchDocuments = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/file/${CRM_ID}`);
-        if (!response.ok) throw new Error("Не вдалося завантажити документи");
-
-        const data = await response.json();
-        setDocuments(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDocuments();
+    ApiRequestFetchDocuments()
+    setLoading(false);
   }, [CRM_ID]);
 
-  const deleteDocument = async (id) => {
-    console.log(id)
-    try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/file/${id}`, { method: "DELETE" });
-      const result = await response.json();
-      if (response.ok) {
-        setDocuments(documents.filter(doc => doc._id !== id));
-      } else {
-        console.error("Помилка:", result.error);
-      }
-    } catch (error) {
-      console.error("Помилка при видаленні документа", error);
-    }
+  const ApiRequestDeleteFile = async (id) => {
+    const result = await deleteDocument(id);
+    console.log(`deleteDocument result  ${result}`)
+    ApiRequestFetchDocuments()
   };
   
 
@@ -66,7 +48,7 @@ const Documents = () => {
             <a href={doc.filePath} target="_blank" rel="noopener noreferrer" className="open-button">
               Відкрити
             </a>
-            <button className="delete-button" onClick={() => deleteDocument(doc._id)}>Видалити</button>
+            <button className="delete-button" onClick={() => ApiRequestDeleteFile(doc._id)}>Видалити</button>
           </div>
         ))}
       </div>

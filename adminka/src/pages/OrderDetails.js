@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/OrderDetails.css'
 import DragDropFile from '../component/DragDropFile';
+import { updOrder, uploadFile } from '../component/fetches';
 const OrderDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -46,53 +47,46 @@ const OrderDetails = () => {
     };
     const getUpdatedFields = () => {
         const updatedFields = {};
+        const originalOrder = location.state.order;
+    
         Object.keys(order).forEach((key) => {
-            if (order[key] !== location.state.order[key]) {
+            if (JSON.stringify(order[key]) !== JSON.stringify(originalOrder[key])) {
                 updatedFields[key] = order[key];
             }
         });
-        if (!updatedFields.customer_company_name && location.state.order.customer_company_name) {
-            updatedFields.customer_company_name = location.state.order.customer_company_name;
+    
+        // Убираем ненужное обновление start_date, если изменился только end_date
+        if (order.end_date !== originalOrder.end_date) {
+            updatedFields.end_date = order.end_date;
         }
-        if (order.end_date !== location.state.order.end_date) {
-            updatedFields.start_date = location.state.order.start_date;
-        }
+    
         return updatedFields;
     };
+    
 
     const handleSave = async () => {
         const updatedFields = await getUpdatedFields();
-        if (Object.keys(updatedFields).length === 0) {
-            console.log('Нет изменений для сохранения.');
-            return;
-        }
         try {
-            const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
-            await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
-                },
-                body: await JSON.stringify(newFields)
-            })
+            if (Object.keys(updatedFields).length > 0) {
+                const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
+                const result = await updOrder(newFields);
+                console.log('Order updated:', result);
+            }
             if(files){
                 if (files.length > 0) {
+                    console.log(`Start load files ${JSON.stringify(files)}`)
                     const formData = new FormData();
                     formData.append("CRM_ID", `${order.CRM_ID}`); // Пример CRM_ID
                     files.forEach((file) => formData.append("file", file)); // Добавляем файлы
-                    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/file/upload`, {
-                        method: "POST",
-                        body: formData,
-                    });
-                    if (!response.ok) throw new Error("Ошибка загрузки");
-                    const data = await response.json();
-                    console.log("Файл загружен:", data);
+                    console.log(formData)
+                    const response = await uploadFile(formData);
+                    console.log(response)
                 }
             }
             
             setIsSaved(true);
             setTimeout(() => {
-                navigate('/');
+                navigate('/dashboard');
             }, 1500);
         } catch (error) {
             console.log('Error in upd order', error)
@@ -246,7 +240,7 @@ const OrderDetails = () => {
             </div>
             <button onClick={handleSave}>Зберегти</button>
             <button onClick={handleOpenDocuments}>Документи</button>
-            <button onClick={() => navigate('/')}>Відміна</button>
+            <button onClick={() => navigate('/dashboard')}>Відміна</button>
         </div>
     );
 };
