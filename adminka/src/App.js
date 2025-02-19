@@ -13,10 +13,10 @@ function App() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const result = await apiRequest('/auth/check', { method: 'GET' });
-      if (result.status === 200) {
-        setIsAuthenticated(true);
-      } else {
+      try {
+        const result = await apiRequest('/auth/check', { method: 'GET' });
+        setIsAuthenticated(result.status === 200);
+      } catch (error) {
         setIsAuthenticated(false);
       }
     };
@@ -24,17 +24,17 @@ function App() {
     checkAuth();
   }, []);
 
-  // Пока идёт проверка токена - ничего не показываем (можно добавить загрузку)
   if (isAuthenticated === null) return <div>Загрузка...</div>;
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/dashboard" element={<AdminPanel />} />
-        <Route path="/add-order" element={<AddOrder />} />
-        <Route path='/order_detail' element={<OrderDetails />} />
-        <Route path='/documents' element={<Documents />} />
+        <Route path="/dashboard" element={isAuthenticated ? <AdminPanel /> : <Navigate to="/" />} />
+        <Route path="/add-order" element={isAuthenticated ? <AddOrder /> : <Navigate to="/" />} />
+        <Route path="/order_detail" element={isAuthenticated ? <OrderDetails /> : <Navigate to="/" />} />
+        <Route path="/documents" element={isAuthenticated ? <Documents /> : <Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" />} /> {/* <-- добавил обработку 404 */}
       </Routes>
     </Router>
   );
