@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SHA256 from 'crypto-js/sha256';
 const API_URL = process.env.REACT_APP_SERVER_URL;
@@ -8,6 +8,7 @@ const Login = () => {
     const [pass, setPass] = useState('');
     const [isWarning, setIsWarning] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
     const hashPassword = (password) => {
         return SHA256(password).toString();
@@ -30,10 +31,12 @@ const Login = () => {
                 body: JSON.stringify({ phone, hashedPass }),
                 credentials: 'include', // Отправляем куки
             });
+            console.log(`response  ${response}`)
+            console.log(`response.ok  ${response.ok}`)
+            if (response.ok) {
+                console.log('navigate to dashboard')
+                setIsAuthenticated(true)
 
-            console.log(response)
-            if (response.status === 200) {
-                navigate('/dashboard'); // Редирект в админку
             } else {
                 setIsWarning(true);
             }
@@ -44,23 +47,27 @@ const Login = () => {
             setIsLoading(false);
         }
     };
-
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard', { replace: true });
+        }
+    },[isAuthenticated])
     return (
         <div className="login-container">
             <h2>Вхід</h2>
             <form onSubmit={handleSubmit}>
                 <label>Логін:</label>
-                <input 
-                    type="text" 
-                    value={phone} 
-                    onChange={(e) => setPhone(e.target.value)} 
+                <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                 />
-                
+
                 <label>Пароль:</label>
-                <input 
-                    type="password" 
-                    value={pass} 
-                    onChange={(e) => setPass(e.target.value)} 
+                <input
+                    type="password"
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
                 />
 
                 {isWarning && <p className="warning">Невірний логін або пароль</p>}

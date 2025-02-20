@@ -15,6 +15,8 @@ function App() {
     const checkAuth = async () => {
       try {
         const result = await apiRequest('/auth/check', { method: 'GET' });
+        console.log(`checkAuth result  ${result}`)
+        console.log(`${result.status}`)
         setIsAuthenticated(result.status === 200);
       } catch (error) {
         setIsAuthenticated(false);
