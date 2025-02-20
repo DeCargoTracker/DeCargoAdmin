@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const result = await apiRequest('/auth/check', { method: 'GET' });
+        const result = await apiRequest('/auth/check', { method: 'POST' });
         console.log(`checkAuth result  ${result}`)
         console.log(`${result.status}`)
         setIsAuthenticated(result.status === 200);

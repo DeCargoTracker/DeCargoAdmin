@@ -9,7 +9,7 @@ const OrdersList = ({ isArchived }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const checkAuth = async () => {
-      const result = await apiRequest('/auth/check', { method: 'GET' });
+      const result = await apiRequest('/auth/check', { method: 'POST' });
       if (result.status === 200) {
         return;
       } else {
