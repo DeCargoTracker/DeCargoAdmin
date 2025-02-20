@@ -9,22 +9,28 @@ import Login from './pages/Login';
 import { checkIsTokenAlive } from './component/fetches';
 function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
-  
-  useEffect(()=>{
-    const result = checkIsTokenAlive();
-    if(result){
-      setIsUserLoggedIn(true);
+
+  useEffect(() => {
+    const tmp = async () => {
+      const result = await checkIsTokenAlive();
+      console.log(result)
+      if (result.status === 200) {
+        setIsUserLoggedIn(true);
+      }else{
+        setIsUserLoggedIn(false);
+      }
     }
-  },[])
+    tmp()
+  }, [])
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={isUserLoggedIn ? <AdminPanel/> : <Login />} />
+        <Route path="/" element={isUserLoggedIn ? <AdminPanel /> : <Login />} />
         <Route path="/dashboard" element={<AdminPanel />} />
         <Route path="/add-order" element={<AddOrder />} />
-        <Route path ='/order_detail' element={<OrderDetails/>}/>
-        <Route path ='/documents' element={<Documents/>}/>
+        <Route path='/order_detail' element={<OrderDetails />} />
+        <Route path='/documents' element={<Documents />} />
       </Routes>
     </Router>
   );

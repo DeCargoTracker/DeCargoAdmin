@@ -95,5 +95,5 @@ export const uploadFile = async (formData) => {
 export const checkIsTokenAlive = async () => {
     const accesstoken = localStorage.getItem('accessToken');
     const result = await apiRequest(`/auth/check`, { method: "GET", headers: "Authorization: Bearer " + accesstoken });
-    return result.status === 200
+    return result
 }
