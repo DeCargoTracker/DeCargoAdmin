@@ -31,8 +31,8 @@ const Login = () => {
                 credentials: 'include', // Отправляем куки
             });
 
-            const data = await response.json();
-            if (response.ok) {
+            console.log(response)
+            if (response.status === 200) {
                 navigate('/dashboard'); // Редирект в админку
             } else {
                 setIsWarning(true);
