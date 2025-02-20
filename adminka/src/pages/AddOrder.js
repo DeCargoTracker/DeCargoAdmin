@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Link } from 'react-router-dom';
 import '../styles/AdminPanel.css'
 import { useNavigate } from 'react-router-dom';
+import { addOrder } from '../component/fetches';
 const AddOrder = () => {
     const navigate = useNavigate();
     const managers = [
@@ -40,29 +41,14 @@ const AddOrder = () => {
         isFinished:false,
     });
     const back_to_adminPanel = () =>{
-        navigate('/')
+        navigate('/dashboard')
     }
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('added')
         console.log('New Order:', JSON.stringify(newOrder));
-        addOrder()
-        navigate(`/`);
-    };
-    const addOrder = async () => {
-        console.log('Push new order');
-        await fetch(`${process.env.REACT_APP_SERVER_URL}/order/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json', // Устанавливает тип данных
-            },
-            body: JSON.stringify(newOrder), // Преобразование объекта в JSON
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log('Response:', data);
-            })
-            .catch((error) => console.error('Error:', error));
+        addOrder(newOrder);
+        navigate(`/dashboard`);
     };
 
     return (

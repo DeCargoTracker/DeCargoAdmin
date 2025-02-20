@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { data, useNavigate } from 'react-router-dom';
 import '../styles/OrderList.css'
+import { getOrders, transferToActiveOrder, transferToArchiveOrder, transferToFinishedOrder } from '../component/fetches';
 
 const OrdersList = ({ isArchived }) => {
   const [orders, setOrders] = useState([]);
@@ -9,21 +10,15 @@ const OrdersList = ({ isArchived }) => {
     console.log(order)
     navigate(`/order_detail`, { state: { order } });
   }
-  const getOrders = async () => {
-    if (isArchived) {
-      console.log(process.env.REACT_APP_SERVER_URL)
-      setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order/admin/archive`)).json())
-      console.log(orders)
-    }
-    else {
-      console.log(process.env.REACT_APP_SERVER_URL)
-      setOrders(await (await fetch(`${process.env.REACT_APP_SERVER_URL}/order/admin/active`)).json())
-      console.log(orders)
-    }
+  const ApiRequestGetOrders = async () => {
+    getOrders(isArchived).then((result) => {
+      console.log(result);
+      setOrders(result);
+    });
   }
   useEffect(() => {
     console.log(`Archived in orders list ${isArchived}`)
-    getOrders()
+    ApiRequestGetOrders()
   }, [isArchived])
   const id_status_list = [
     { id: 0, name: 'Нова заявка' },
@@ -33,53 +28,26 @@ const OrdersList = ({ isArchived }) => {
     { id: 4, name: 'На митниці після погран переходу' },
     { id: 5, name: 'Ни вивантаженні' }
   ];
-  const finishOrder = async (order) => {
+  const ApiRequestFinishOrder = async (order) => {
     console.log(`Finishing order ${order.CRM_ID} ${true}`)
-    try {
-      const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isFinished: true }
-      await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
-        },
-        body: await JSON.stringify(newFields)
-      })
-    } catch (error) {
-      console.log('Error in upd order', error)
-    }
-    getOrders()
+    const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isFinished: true }
+    const result = await transferToFinishedOrder(newFields)
+    console.log(`Result of finishing order ${result}`)
+    ApiRequestGetOrders()
   }
   const archiveOrder = async (order) => {
     console.log(`Archiving order ${order.CRM_ID} ${true}`)
-    try {
-      const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: true }
-      await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
-        },
-        body: await JSON.stringify(newFields)
-      })
-    } catch (error) {
-      console.log('Error in archiveOrder order', error)
-    }
-    getOrders()
+    const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: true }
+    const result = await transferToArchiveOrder(newFields)
+    console.log(`Result of archiving order ${result}`)
+    ApiRequestGetOrders()
   }
   const UNarchiveOrder = async (order) => {
     console.log(`Archiving order ${order.CRM_ID} ${false}`)
-    try {
-      const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: false }
-      await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
-        },
-        body: await JSON.stringify(newFields)
-      })
-    } catch (error) {
-      console.log('Error in archiveOrder order', error)
-    }
-    getOrders()
+    const newFields = { customer_company_name: order.customer_company_name, CRM_ID: order.CRM_ID, isArchivedAdmin: false }
+    const result = await transferToActiveOrder(newFields)
+    console.log(`Result of archiving order ${result}`)
+    ApiRequestGetOrders()
   }
   return (
     <div className="order-list">
@@ -97,7 +65,7 @@ const OrdersList = ({ isArchived }) => {
               <p><strong>Finished:</strong> {order.isFinished ? 'Завершено ✅' : 'Не завершено ❗'}</p>
             </li>
             {!order.isFinished ?
-              parseInt(order.status) == 5 && order.approved ? <button onClick={() => { finishOrder(order) }} className="button">Завершити перевезення</button> : <></>
+              parseInt(order.status) == 5 && order.approved ? <button onClick={() => { ApiRequestFinishOrder(order) }} className="button">Завершити перевезення</button> : <></>
               :
               <></>
             }

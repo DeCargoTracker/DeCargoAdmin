@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/OrderDetails.css'
 import DragDropFile from '../component/DragDropFile';
+import { updOrder, uploadFile } from '../component/fetches';
 const OrderDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -68,25 +69,17 @@ const OrderDetails = () => {
         }
         try {
             const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
-            await fetch(`${process.env.REACT_APP_SERVER_URL}/order/upd`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json' // Указываем, что тело запроса — JSON
-                },
-                body: await JSON.stringify(newFields)
-            })
+            const result = await updOrder(newFields);
+            console.log(`Result of upd order ${result}`);
             if(files){
                 if (files.length > 0) {
+                    console.log(`Start load files ${JSON.stringify(files)}`)
                     const formData = new FormData();
                     formData.append("CRM_ID", `${order.CRM_ID}`); // Пример CRM_ID
                     files.forEach((file) => formData.append("file", file)); // Добавляем файлы
-                    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/file/upload`, {
-                        method: "POST",
-                        body: formData,
-                    });
-                    if (!response.ok) throw new Error("Ошибка загрузки");
-                    const data = await response.json();
-                    console.log("Файл загружен:", data);
+                    console.log(formData)
+                    const response = await uploadFile(formData);
+                    console.log(response)
                 }
             }
             
@@ -100,6 +93,7 @@ const OrderDetails = () => {
         }
     };
     const handleOpenDocuments = async () => {
+        console.log(`Open documents for CRM ID: ${location.state.order.CRM_ID}`); 
         navigate('/documents', {state: {CRM:location.state.order.CRM_ID} });
     };
     useEffect(() => {
