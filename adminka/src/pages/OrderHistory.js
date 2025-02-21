@@ -5,11 +5,11 @@ import '../styles/OrderDetails.css';
 const OrderHistory = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [order] = useState(location.state.order);
+    const [order, setOrder] = useState(location.state.order);
     const [historyIndex, setHistoryIndex] = useState(order.history.length - 1); // Показываем последний элемент истории
     const [highlightedFields, setHighlightedFields] = useState([]);
     const [currentUpdates, setCurrentUpdates] = useState([]);
-    
+
     const id_status_list = [
         { id: 0, name: 'Нова заявка' },
         { id: 1, name: 'На завантаженні' },
@@ -28,29 +28,37 @@ const OrderHistory = () => {
             setHighlightedFields(updatedFields);
 
             // Применяем изменения к текущим данным заказа
-            currentUpdates.forEach(element => {
+            currentHistory.updates.forEach(element => {
                 if (order.hasOwnProperty(element.field)) {
-                    
                     order[element.field] = element.newValue;
                 }
             });
-            console.log(JSON.stringify(order))
-            // Снимаем подсветку через 1.5 секунды
-            setTimeout(() => setHighlightedFields([]), 1500);
+            console.log(JSON.stringify(order));
+
         }
-    }, [currentHistory, currentUpdates]);
+    }, [currentHistory]);
 
     const getFieldClass = (field) => {
-        return highlightedFields.includes(field) ? 'highlight' : '';
+        return highlightedFields.includes(field) ? 'highlight_history' : '';
     };
 
     // Логирование изменений
     useEffect(() => {
         console.log(`Current updates: ${JSON.stringify(currentUpdates)}`);
-        console.log(order);
     }, [currentUpdates]);
 
     const handleHistoryChange = (direction) => {
+        setHighlightedFields([]);
+        if (direction < 0) {
+            // При переходе назад восстанавливаем старые значения
+            currentUpdates.forEach(element => {
+                if (order.hasOwnProperty(element.field)) {
+                    order[element.field] = element.oldValue;
+                }
+            });
+            setOrder({ ...order });
+        }
+
         setHistoryIndex(prev => {
             let newIndex = prev + direction;
             if (newIndex < 0) newIndex = 0;

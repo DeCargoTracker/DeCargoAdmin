@@ -99,7 +99,10 @@
       border-color: #cccccc;
   }
 }
-
+.highlight_history{
+  animation: highlight 2s ease-in-out; /* Применяем анимацию */
+  border: 2px solid #cccccc; /* Параметры границы */
+}
 .order-details.saved {
   animation: highlight 2s ease-in-out; /* Применяем анимацию */
   border: 2px solid #cccccc; /* Параметры границы */
