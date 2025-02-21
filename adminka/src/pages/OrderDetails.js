@@ -69,9 +69,16 @@ const OrderDetails = () => {
         }
         try {
             const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
-            const result = await updOrder(newFields);
-            console.log(`Result of upd order ${result}`);
-            if(files){
+            try {
+                const result = await updOrder(newFields);
+                console.log(`Result of upd order ${result}`);
+                setIsSaved(true)
+            } catch (error) {
+                console.log(`Error in upd order ${error}`)
+                setIsSaved(false);
+                return
+            }
+            if (files) {
                 if (files.length > 0) {
                     console.log(`Start load files ${JSON.stringify(files)}`)
                     const formData = new FormData();
@@ -82,10 +89,10 @@ const OrderDetails = () => {
                     console.log(response)
                 }
             }
-            
+
             setIsSaved(true);
             setTimeout(() => {
-                navigate('/');
+                navigate('/dashboard');
             }, 1500);
         } catch (error) {
             console.log('Error in upd order', error)
@@ -93,8 +100,8 @@ const OrderDetails = () => {
         }
     };
     const handleOpenDocuments = async () => {
-        console.log(`Open documents for CRM ID: ${location.state.order.CRM_ID}`); 
-        navigate('/documents', {state: {CRM:location.state.order.CRM_ID} });
+        console.log(`Open documents for CRM ID: ${location.state.order.CRM_ID}`);
+        navigate('/documents', { state: { CRM: location.state.order.CRM_ID } });
     };
     useEffect(() => {
         handleStatusIDChange()
@@ -240,7 +247,7 @@ const OrderDetails = () => {
             </div>
             <button onClick={handleSave}>Зберегти</button>
             <button onClick={handleOpenDocuments}>Документи</button>
-            <button onClick={() => navigate('/')}>Відміна</button>
+            <button onClick={() => navigate('/dashboard')}>Відміна</button>
         </div>
     );
 };

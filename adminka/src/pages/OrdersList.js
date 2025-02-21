@@ -11,10 +11,19 @@ const OrdersList = ({ isArchived }) => {
     navigate(`/order_detail`, { state: { order } });
   }
   const ApiRequestGetOrders = async () => {
-    getOrders(isArchived).then((result) => {
-      console.log(result);
-      setOrders(result);
-    });
+    try {
+      getOrders(isArchived).then((result) => {
+        console.log(`ApiRequestGetOrders ${result.error}`);
+        if(result.error == "SESSION_EXPIRED"){
+          console.log(`Session expired`)
+          navigate('/')
+          return;
+        }
+        setOrders(result);
+      });
+    } catch (error) {
+      navigate('/')
+    }
   }
   useEffect(() => {
     console.log(`Archived in orders list ${isArchived}`)
@@ -49,12 +58,17 @@ const OrdersList = ({ isArchived }) => {
     console.log(`Result of archiving order ${result}`)
     ApiRequestGetOrders()
   }
+  const orderHistoryClick = async(order) => {
+    console.log(order)
+    navigate(`/order_history`, { state: { order } });
+  }
+
   return (
     <div className="order-list">
       <h2>Order List</h2>
       <ul className="order-cards">
         {[...orders].reverse().map((order, index) => (
-          <>
+          <div style={{borderColor:'#28a745', borderWidth:'1px', borderStyle:'solid', padding:'10px', margin:'10px', borderRadius:"10px"}}>
             <li className="order-card" key={index} onClick={() => { orderClick(order) }}>
               <h3>{order.customer_company_name}</h3>
               <p><strong>CRM ID:</strong> {order.CRM_ID}</p>
@@ -76,8 +90,8 @@ const OrdersList = ({ isArchived }) => {
                 <button onClick={() => UNarchiveOrder(order)} className="button">Зробити активним</button>
               )
             ) : null}
-
-          </>
+            {order.history.length > 0 ? <button onClick={() => orderHistoryClick(order)} className="button">Історія змін</button> : <></>}
+          </div>
         ))}
       </ul>
     </div>

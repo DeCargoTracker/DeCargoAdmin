@@ -65,7 +65,6 @@ const apiRequest = async (endpoint, options = {}) => {
             },
         });
     }
-
     return response.json();
 };
 

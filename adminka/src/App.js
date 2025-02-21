@@ -7,13 +7,19 @@ import AddOrder from './pages/AddOrder';
 import Documents from './pages/Documents';
 import Login from './pages/Login';
 import { checkIsTokenAlive } from './component/fetches';
+import OrderHistory from './pages/OrderHistory';
 function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
 
   useEffect(() => {
     const tmp = async () => {
       const result = await checkIsTokenAlive();
-      console.log(result)
+      console.log(result.error)
+      if(result.error == "SESSION_EXPIRED"){
+        console.log(`Session expired`)
+        setIsUserLoggedIn(false);
+        return;
+      }
       if (result.status === 200) {
         setIsUserLoggedIn(true);
       }else{
@@ -30,6 +36,7 @@ function App() {
         <Route path="/dashboard" element={<AdminPanel />} />
         <Route path="/add-order" element={<AddOrder />} />
         <Route path='/order_detail' element={<OrderDetails />} />
+        <Route path='/order_history' element={<OrderHistory />} />
         <Route path='/documents' element={<Documents />} />
       </Routes>
     </Router>

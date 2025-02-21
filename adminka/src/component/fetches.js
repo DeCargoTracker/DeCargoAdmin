@@ -77,7 +77,7 @@ export const updOrder = async (newFields) => {
     console.log(newFields)
     try {
         const result = await apiRequest('/order/upd', { method: 'PUT', body: JSON.stringify({ newFields }) });
-        return result
+        return result;
     } catch (error) {
         console.error("Помилка при оновленні замовлення", error);
     }

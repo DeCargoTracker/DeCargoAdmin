@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SHA256 from 'crypto-js/sha256';
+import { checkIsTokenAlive } from '../component/fetches';
 const API_URL = process.env.REACT_APP_SERVER_URL;
 
 const Login = () => {
@@ -9,6 +10,22 @@ const Login = () => {
     const [isWarning, setIsWarning] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
+
+    useEffect(() => {
+        const tmp = async () => {
+            const result = await checkIsTokenAlive();
+            console.log(result)
+            if (result.status === 200) {
+                setIsUserLoggedIn(true);
+                navigate('/dashboard');
+            } else {
+                setIsUserLoggedIn(false);
+            }
+        }
+        tmp()
+    }, [])
+
     const hashPassword = (password) => {
         return SHA256(password).toString();
     };

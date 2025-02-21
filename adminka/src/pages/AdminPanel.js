@@ -4,6 +4,9 @@ import '../styles/AdminPanel.css'
 import OrdersList from './OrdersList';
 
 const AdminPanel = () => {
+  const [isArchived, setIsArchived] = useState(false)
+  const navigate = useNavigate();
+  
   const go_to_page = () => {
     console.log('navigate')
     navigate('/add-order')
@@ -13,8 +16,7 @@ const AdminPanel = () => {
     setIsArchived(!isArchived)
     console.log(`To ${isArchived}`)
   }
-  const [isArchived, setIsArchived] = useState(false)
-  const navigate = useNavigate();
+  
   return (
     <div className="admin-panel">
       <h1>Logistics Admin Panel</h1>
