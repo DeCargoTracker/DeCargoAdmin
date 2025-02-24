@@ -48,18 +48,17 @@ const Login = () => {
                 body: JSON.stringify({ phone, hashedPass }),
             });
             const data = await response.json()
-            console.log(data.accessToken)
-            console.log(data.refreshToken)
             console.log(data.user)
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('refreshToken', data.refreshToken);
-            localStorage.setItem('user', JSON.stringify(data.user));
-
-            if (response.ok) {
-                console.log(response.ok)
-                navigate('/dashboard'); // Редирект в админку
-            } else {
-                setIsWarning(true);
+            if(data.user.level === 'admin'){
+                if (response.ok) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    console.log(response.ok)
+                    navigate('/dashboard'); // Редирект в админку
+                } else {
+                    setIsWarning(true);
+                }
             }
         } catch (error) {
             console.error('Ошибка входа:', error);
