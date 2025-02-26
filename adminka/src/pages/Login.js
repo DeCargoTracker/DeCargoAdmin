@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SHA256 from 'crypto-js/sha256';
 import { checkIsTokenAlive } from '../component/fetches';
+import "../styles/LoginPage.css"
 const API_URL = process.env.REACT_APP_SERVER_URL;
 
 const Login = () => {
@@ -72,6 +73,7 @@ const Login = () => {
         <div className="login-container">
             <h2>Вхід</h2>
             <form onSubmit={handleSubmit}>
+                <div className='input_div'>
                 <label>Логін:</label>
                 <input
                     type="text"
@@ -85,6 +87,7 @@ const Login = () => {
                     value={pass}
                     onChange={(e) => setPass(e.target.value)}
                 />
+                </div>
 
                 {isWarning && <p className="warning">Невірний логін або пароль</p>}
 
