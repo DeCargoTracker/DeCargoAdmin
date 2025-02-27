@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Link } from 'react-router-dom';
-import '../styles/AdminPanel.css'
 import { useNavigate } from 'react-router-dom';
 import { addOrder } from '../component/fetches';
 const AddOrder = () => {
@@ -54,7 +53,7 @@ const AddOrder = () => {
     return (
         <div className="add-order">
             <h1>Add New Order</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{minWidth:'94%'}}>
                 <label>
                     CRM_ID:
                     <input

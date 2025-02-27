@@ -241,9 +241,9 @@ const OrderDetails = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                <div>
-                    <DragDropFile onFilesSelect={setFiles} />
-                </div>
+            </div>
+            <div>
+                <DragDropFile onFilesSelect={setFiles} />
             </div>
             <button onClick={handleSave}>Зберегти</button>
             <button onClick={handleOpenDocuments}>Документи</button>
