@@ -18,7 +18,11 @@ export const getOrders = async (isArchived) => {
         return orders;
     }
 }
-
+export const getUsers = async () => {
+    const orders = await apiRequest('/user', { method: 'GET' });
+    console.log(orders);
+    return orders;
+}
 export const transferToArchiveOrder = async (order) => {
     console.log(`transferToArchiveOrder order ${order.CRM_ID} ${true}`)
     const newFields = { CRM_ID: order.CRM_ID, isArchivedAdmin: true }
