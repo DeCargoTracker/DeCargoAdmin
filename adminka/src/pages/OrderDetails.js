@@ -70,10 +70,10 @@ const OrderDetails = () => {
         try {
             const newFields = { ...updatedFields, approved: false, CRM_ID: location.state.order.CRM_ID }
             try {
+                setIsSaved(true)
                 const result = await updOrder(newFields);
                 console.log(`Result of upd order ${result}`);
-                setIsSaved(true)
-            } catch (error) {
+                } catch (error) {
                 console.log(`Error in upd order ${error}`)
                 setIsSaved(false);
                 return
@@ -93,7 +93,7 @@ const OrderDetails = () => {
             setIsSaved(true);
             setTimeout(() => {
                 navigate('/dashboard');
-            }, 1500);
+            });
         } catch (error) {
             console.log('Error in upd order', error)
             setIsSaved(false);
